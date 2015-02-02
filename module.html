@@ -1,3 +1,13 @@
-<div ng-controller='AnnotationsPanelCtrl'>
-  <h3>annotations</h3>
+<div ng-controller="AnnotationsPanelCtrl">
+  <div class="annotations-wrapper">
+    <ul class="annotations-list">
+      <li ng-repeat="annotation in annotations" class="annotation {{annotation.type}}">
+        <span class="time" title="{{annotation.hrTime}}">{{annotation.hrTimeShort}}</span>
+        <span class="title">{{annotation.title}}</span>
+        <span class="text">{{annotation.text}}</span>
+        <span class="tags">{{annotation.tags}}</span>
+      </li>
+    </ul>
+  </div>
 </div>
+
