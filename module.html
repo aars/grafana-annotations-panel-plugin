@@ -6,7 +6,7 @@
         <span class="title" ng-click="annotationModal(annotation)" config-modal="plugins/annotations.panel/annotation-modal.html">{{annotation.title}}</span>
         <span class="text" ng-click="annotationModal(annotation)" config-modal="plugins/annotations.panel/annotation-modal.html">{{annotation.text}}</span>
         <span class="tags">{{annotation.tags}}</span>
-        <a class="event-link" target="_blank" href="http://graphite.rxs.sp2o.org/events/{{eventId(annotation.$$hashKey)}}/"><span class="link-icon"></span></a>
+        <a class="event-link" target="_blank" href="http://graphite.rxs.sp2o.org/events/{{annotation.eventId}}/"><span class="link-icon"></span></a>
       </li>
     </ul>
   </div>

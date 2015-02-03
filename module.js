@@ -25,13 +25,6 @@ function (angular, app, _, moment, PanelMeta) {
     $scope.range = timeSrv.timeRange();
     $scope.rangeUnparsed = timeSrv.timeRange(false);
     
-    // Helper to tranlate objectId to remote eventId.
-    $scope.eventId = function (str) {
-      // Somehow it is always +5. But we need to get the actual ID from the graphite
-      // datasource
-      return str.split(':').length && parseInt(str.split(':')[1], 10) + 5;
-    };
-
     // Helper to display events in modal
     $scope.annotationModal = function (annotation) {
       $scope.textAsHtml = function (text) {
