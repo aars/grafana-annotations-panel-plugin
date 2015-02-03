@@ -11,12 +11,13 @@ function (angular, app, _, moment, PanelMeta) {
   var module = angular.module('grafana.panels.annotations', []);
   app.useModule(module);
 
-
-  module.controller('AnnotationsPanelCtrl', function($scope, panelSrv, annotationsSrv, timeSrv, datasourceSrv, $q) {
+  module.controller('AnnotationsPanelCtrl', function($scope, panelSrv, annotationsSrv, timeSrv, datasourceSrv, $q, $sce) {
     $scope.panelMeta = new PanelMeta({
-      description : "Annotations listing panel."
+      description : "Annotations listing panel.",
+      index: 'General'
     });
-    
+    $scope.panelMeta.addEditorTab('Tags & Types', 'plugins/annotations.panel/tags-types-editor.html');
+  
     var promiseCached;
     var list = [];
     var timezone;
@@ -24,6 +25,22 @@ function (angular, app, _, moment, PanelMeta) {
     $scope.range = timeSrv.timeRange();
     $scope.rangeUnparsed = timeSrv.timeRange(false);
     
+    // Helper to tranlate objectId to remote eventId.
+    $scope.eventId = function (str) {
+      // Somehow it is always +5. But we need to get the actual ID from the graphite
+      // datasource
+      return str.split(':').length && parseInt(str.split(':')[1], 10) + 5;
+    };
+
+    // Helper to display events in modal
+    $scope.annotationModal = function (annotation) {
+      $scope.textAsHtml = function (text) {
+        return $sce.trustAsHtml(text.replace("\r\n", "<br>"));
+      }
+
+      $scope.annotation = annotation;
+    }
+
     // set and populate defaults
     var _d = {
     };
@@ -39,6 +56,9 @@ function (angular, app, _, moment, PanelMeta) {
       
       $scope.annotationsPromise
         .then(function (annotations) {
+          // Reverse so newest will be drawn first.
+          annotations.reverse();
+
           $scope.panelMeta.loading = false;
           $scope.annotations = annotations;
           $scope.render(annotations);
@@ -104,7 +124,11 @@ function (angular, app, _, moment, PanelMeta) {
           return;
         }
       });
+      
 
+      annotation.isLong = annotation.text.length > 50;
+
+      // annotation.eventId = annotation.$$hashKey.split(':')[1] + 3;
       list.push(annotation);
     }
 
