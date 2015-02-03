@@ -1,0 +1,127 @@
+.annotations-wrapper {
+  padding: 10px;
+  max-height: 350px;
+  overflow-y: auto;
+}
+
+.annotations-list {
+  font-weight: 200;
+  margin: 0;
+  list-style-type: none;
+}
+.annotations-list .annotation {
+  position: relative;
+  margin-bottom: 5px;
+  border-bottom: 1px solid rgba(255,255,255,.1);
+  padding: 3px 8px;
+}
+.annotations-list .annotation.long {
+  border-bottom: 1px dashed rgba(255,255,255,.5);
+}
+
+.annotations-list .annotation .title {
+  display: inline-block;
+  width: 85px;
+
+  color: #fff;
+  font-weight: 300;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+
+  cursor: pointer;
+}
+.annotations-list .annotation .text {
+  position: absolute;
+  left: 100px;
+  right: 200px;
+
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  
+  cursor: pointer;
+}
+.modal-header h3 .title {
+  color: #fff;
+}
+
+.modal-header.fatal h3 .title,
+.annotations-list .annotation.fatal .title {
+  color: #d00;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+.modal-header.error h3 .title,
+.annotations-list .annotation.error .title {
+  color: #f9b;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+.modal-header.warn h3 .title,
+.annotations-list .annotation.warn .title {
+  color: #a55;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+.modal-header.info h3 .title,
+.annotations-list .annotation.info .title {
+  color: #4cb;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+.annotations-list .annotation .time {
+  position: absolute;
+  right: 20px;
+  color: #999;
+  font-size: 12px;
+}
+.annotation-modal .tags,
+.annotations-list .annotation .tags {
+  padding: 1px 4px;
+  border-radius: 4px;
+  background: #590d97;
+}
+.annotations-list .annotation .tags {
+  position: absolute;
+  right: 90px;
+  top: -1px;
+}
+
+.annotations-list .annotation .event-link {
+  position: absolute;
+  right: 0;
+  top: 3px;
+  color: rgba(255,255,255,.5);
+  transition: color .2s;
+}
+.annotations-list .annotation .event-link:hover {
+  color: rgba(255,255,255,.8);
+}
+.annotations-list .annotation .link-icon:after {
+  content: '\f0c1';
+  font-family: FontAwesome;
+}
+
+.annotation-modal {
+  margin: 0 10px;
+  padding: 10px;
+  overflow-y: auto;
+}
+
+.modal-header h3 {
+  font-weight: 300;
+  color: #777;
+}
+
+.annotation-modal .text {
+  padding: 10px;
+  margin: 10px 0 20px;
+  background: #eef;
+  color: #223;
+}
+.annotation-modal .text pre {
+  margin: 10px 0;
+  background: rgba(0,0,0,.2);
+  color: #000;
+}
