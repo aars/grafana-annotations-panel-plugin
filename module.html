@@ -3,7 +3,7 @@
     <ul class="annotations-list">
       <li ng-repeat="annotation in annotations" class="annotation {{annotation.type}}" ng-class="{long: annotation.isLong}">
         <span class="time" title="{{annotation.hrTime}}">{{annotation.hrTimeShort}}</span>
-        <span class="title" ng-click="annotationModal(annotation)">{{annotation.title}}</span>
+        <span class="title" ng-click="annotationModal(annotation)" config-modal="plugins/annotations.panel/annotation-modal.html">{{annotation.title}}</span>
         <span class="text" ng-click="annotationModal(annotation)" config-modal="plugins/annotations.panel/annotation-modal.html">{{annotation.text}}</span>
         <span class="tags">{{annotation.tags}}</span>
         <a class="event-link" target="_blank" href="http://graphite.rxs.sp2o.org/events/{{eventId(annotation.$$hashKey)}}/"><span class="link-icon"></span></a>
@@ -11,4 +11,4 @@
     </ul>
   </div>
 </div>
-
+<link ng-non-bindable rel="stylesheet" href="plugins/annotations.panel/annotations.panel.css">
