@@ -96,10 +96,6 @@ function (angular, app, _, moment, PanelMeta, config) {
 
     // Copy of annotationsSrv.getAnnotations without the HTML formatting.
     function getAnnotations(rangeUnparsed, dashboard) {
-      if (!dashboard.annotations.enable) {
-        return $q.when(null);
-      }
-
       if (promiseCached) {
         return promiseCached;
       }
