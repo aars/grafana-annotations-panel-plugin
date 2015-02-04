@@ -13,21 +13,21 @@ function (angular, app, _, moment, PanelMeta, config) {
   app.useModule(module);
 
   module.controller('AnnotationsPanelCtrl', function(
-    $scope, 
+    $scope,
     $rootScope,
-    panelSrv, 
-    annotationsSrv, 
-    timeSrv, 
-    datasourceSrv, 
-    $q, 
+    panelSrv,
+    annotationsSrv,
+    timeSrv,
+    datasourceSrv,
+    $q,
     $sce
     ) {
 
     $scope.panelMeta = new PanelMeta({
       description : "Annotations panel using graphite events."
     });
-    $scope.panelMeta.addEditorTab('Tags & Types', 'plugins/annotations.panel/tags-types-editor.html');
-    
+    $scope.panelMeta.addEditorTab('Filters', 'plugins/annotations.panel/filter-editor.html');
+
     // Cached annotations
     var promiseCached;
     var list = [];
@@ -36,22 +36,24 @@ function (angular, app, _, moment, PanelMeta, config) {
     $scope.annotations = {};
     $scope.range = timeSrv.timeRange();
     $scope.rangeUnparsed = timeSrv.timeRange(false);
-    
+
     // Get includable types from config
     function includableTypes() {
       if (!config.graphite || !config.graphite.events) return [];
       var c = config.graphite.events;
 
-      return c.types || []; 
+      return c.types || [];
     }
 
     // set and populate defaults
     var _d = {
       includeTypes: ['info', 'error', 'fatal'],
       includableTypes: includableTypes(),
+      datasource: 'graphite',
+      graphiteTags: null
     };
     _.defaults($scope.panel, _d);
-    
+
     function clearCache() {
       promiseCached = null;
       list = [];
@@ -64,6 +66,8 @@ function (angular, app, _, moment, PanelMeta, config) {
     // refresh when we want to.
     $scope.$on('refresh', refresh);
     $scope.$watch('panel.includeTypes', refresh);
+    $scope.$watch('panel.datasource', refresh);
+    $scope.$watch('panel.graphiteTags', refresh);
 
     // Refresh when dashboard wants to.
     $rootScope.onAppEvent('refresh', clearCache);
@@ -75,8 +79,8 @@ function (angular, app, _, moment, PanelMeta, config) {
 
       $scope.updateTimeRange();
 
-      $scope.annotationsPromise = getAnnotations($scope.rangeUnparsed, $scope.dashboard);
-      
+      $scope.annotationsPromise = getAnnotations($scope.rangeUnparsed);
+
       $scope.annotationsPromise
         .then(function (annotations) {
           $scope.panelMeta.loading = false;
@@ -94,36 +98,31 @@ function (angular, app, _, moment, PanelMeta, config) {
       $scope.rangeUnparsed = timeSrv.timeRange(false);
     };
 
-    // Copy of annotationsSrv.getAnnotations without the HTML formatting.
-    function getAnnotations(rangeUnparsed, dashboard) {
+    function getAnnotations(rangeUnparsed) {
       if (promiseCached) {
         return promiseCached;
       }
-      
-      timezone = dashboard.timezone;
-      var annotations = _.where(dashboard.annotations.list, {enable: true});
-      var promises = _.map(annotations, function (annotation) {
-        var datasource = datasourceSrv.get(annotation.datasource);
-        
-        return datasource.annotationQuery(annotation, rangeUnparsed)
-          .then(receiveAnnotationResults)
-          .then(null, errorHandler);
-      }, this);
 
-      promiseCached = $q.all(promises)
-        .then(function () {
-          return list;
-        });
+      timezone = $scope.dashboard.timezone;
+      var datasource = datasourceSrv.get($scope.panel.datasource);
+      var annotation = {tags: $scope.panel.graphiteTags};
+
+      promiseCached = datasource.annotationQuery(annotation, rangeUnparsed)
+          .then(receiveAnnotationResults)
+          .then(null, errorHandler)
+          .then(function () {
+            return list;
+          });
 
       return promiseCached;
     }
-    
+
     function receiveAnnotationResults(results) {
       for (var i=0; i<results.length; i++) {
         addAnnotation(results[i]);
       }
     }
-   
+
     // Analyze and enrich annotation with usefullness.
     function addAnnotation(annotation) {
       // Try to parse a 'type' from the title.
@@ -134,7 +133,7 @@ function (angular, app, _, moment, PanelMeta, config) {
 
       // Apply inclusion rules.
       if (!includeAnnotation(annotation)) return;
-      
+
       // Human readable timestamps
       var hrTimeFormat = config.hrTimeFormat;
       var hrTimeFormatShort = config.hrTimeFormatShort;
@@ -145,7 +144,7 @@ function (angular, app, _, moment, PanelMeta, config) {
       // Add annotation in reverse order, newest first.
       list.unshift(annotation);
     }
-  
+
     // Is the annotation(.type) included in our list?
     function includeAnnotation(annotation) {
       // No types included? Everything is included!
@@ -163,7 +162,7 @@ function (angular, app, _, moment, PanelMeta, config) {
           type  = c.defaultType;
 
       if (!c.typeFromTitle) return c.defaultType;
-        
+
       c.typeFromTitle.forEach(function (typeMatch) {
         if (title.match(typeMatch)) return type = typeMatch;
       });
@@ -175,7 +174,7 @@ function (angular, app, _, moment, PanelMeta, config) {
       console.log('Annotation error: ', err);
       var message = err.message || "Annotation query failed";
     }
-    
+
     // Helper to display events in modal
     $scope.annotationModal = function (annotation) {
       $scope.textAsHtml = function (text) {

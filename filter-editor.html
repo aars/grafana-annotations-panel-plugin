@@ -1,0 +1,20 @@
+<div class="editor-row">
+  <div class="section span2">
+    <h5>Tags</h5>
+    <div class="editor-row">
+        <label class="small"><b>Filter tags</b> (Empty to disable)</label><input class="input-medium" type="text" name="tags" ng-model="panel.graphiteTags">
+        <label class="small">datasource: <b>graphite</b></label>
+      </div>
+    </div>
+  </div>
+  <div class="section span4">
+    <h5>Include only these types</h5>
+    <div class="editor-option" ng-if="panel.includableTypes.length">
+      <label class="small"><b>Filter types</b> (Unselect all to disable)</label><select class="input-large" ng-model="panel.includeTypes" ng-options="t for t in panel.includableTypes" multiple ng-multiple="true"></select>
+    </div>
+    <div class="editor-option" ng-if="!panel.includableTypes.length">
+      No types defined. See plugins/annotations.panel/config.js.
+    </div>
+  </div>
+
+</div>

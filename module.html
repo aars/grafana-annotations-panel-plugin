@@ -1,6 +1,15 @@
 <div ng-controller="AnnotationsPanelCtrl">
+  <div class="small annotations-panel-meta" ng-click="editPanel()">
+    Filters: 
+      tags:<b>{{panel.graphiteTags || 'disabled'}}</b> 
+      types:<b>{{panel.includeTypes.join(', ') || 'disabled'}}</b>
+  </div>
   <div class="annotations-wrapper">
+
     <ul class="annotations-list">
+      <li class="annotation" ng-if="!annotations.length">
+        No events.
+      </li>
       <li ng-repeat="annotation in annotations" class="annotation {{annotation.type}}" ng-class="{long: annotation.isLong}">
         <span class="time" title="{{annotation.hrTime}}">{{annotation.hrTimeShort}}</span>
         <span class="title" ng-click="annotationModal(annotation)" config-modal="plugins/annotations.panel/annotation-modal.html">{{annotation.title}}</span>

@@ -125,3 +125,15 @@
   background: rgba(0,0,0,.2);
   color: #000;
 }
+
+.annotations-panel-meta {
+  position: absolute;
+  top: 5px;
+  right: 20px;
+  color: #555;
+  transition: color .2s;
+  cursor: pointer;
+}
+.annotations-panel-meta:hover {
+  color: #eef;
+}

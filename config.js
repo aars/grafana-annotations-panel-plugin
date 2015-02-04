@@ -15,7 +15,7 @@ define(function () {
       events: {
         // Define our default type and list all possible types.
         types: ['event', 'info', 'warn', 'error', 'fatal'],
-        
+
         // Default type when no match is found.
         defaultType: 'event',
 
