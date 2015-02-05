@@ -1,16 +1,18 @@
-<div class="modal-header {{annotation.type}}">
+<div class="annotation-modal modal-header annotation-type-{{annotation.type}}">
   <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
   <h3>
     <span class="title">{{annotation.title}}</span>
     @
     <span class="time">{{annotation.hrTime}}</span>
   </h3>
+  <div>tags: <span ng-repeat="tag in annotation.tagList" class="annotation-tag tag-{{tag}}" style="background: {{tagColor(tag)}}">{{tag}}</span></div>
 </div>
-<div class="modal-body">
-  <div class="annotation-modal {{annotation.type}}">
+<div class="annotation-modal modal-body annotation-type-{{annotation.type}}">
+  <h5>message:</h5>
+  <div class="message">{{annotation.message}}</div>
+  <div class="data" ng-if="annotation.dataString">
     <h5>data:</h5>
-    <div class="text" ng-bind-html="textAsHtml(annotation.text)"></div>
-    <div>tags: <span class="tags">{{annotation.tags}}</span></div>
+    <pre>{{annotation.dataString}}</pre>
   </div>
 </div>
 <div class="modal-footer">

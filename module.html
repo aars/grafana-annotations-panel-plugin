@@ -10,12 +10,14 @@
       <li class="annotation" ng-if="!annotations.length">
         No events.
       </li>
-      <li ng-repeat="annotation in annotations" class="annotation {{annotation.type}}" ng-class="{long: annotation.isLong}">
-        <span class="time" title="{{annotation.hrTime}}">{{annotation.hrTimeShort}}</span>
-        <span class="title" ng-click="annotationModal(annotation)" config-modal="plugins/annotations.panel/annotation-modal.html">{{annotation.title}}</span>
-        <span class="text" ng-click="annotationModal(annotation)" config-modal="plugins/annotations.panel/annotation-modal.html">{{annotation.text}}</span>
-        <span class="tags">{{annotation.tags}}</span>
-        <a class="event-link" target="_blank" href="http://graphite.rxs.sp2o.org/events/{{annotation.eventId}}/"><span class="link-icon"></span></a>
+      <li ng-repeat="annotation in annotations" class="annotation annotation-type-{{annotation.type}}" ng-class="{long: annotation.isLong, hasData: annotation.data}">
+        <div class="title" ng-click="annotationModal(annotation)">{{annotation.title}}</div>
+
+        <div class="message" ng-click="annotationModal(annotation)">{{annotation.message}}</div>
+        <div class="time" title="{{annotation.hrTime}}">{{annotation.hrTimeShort}}</div>
+        <div class="tags">
+          <span class="annotation-tag tag-{{tag}}" ng-repeat="tag in annotation.tagList" style="background: {{tagColor(tag)}}">{{tag}}</span>
+        </div>
       </li>
     </ul>
   </div>
