@@ -164,9 +164,9 @@ function (angular, app, _, moment, PanelMeta, config) {
         dataString = data;
 
         // try to prettify the dataString if it looks like JSON
-        try {
-          dataString = JSON.stringify(JSON.parse(data), null, '  ');
-        } catch (e) {}
+        if (typeof data === 'object') {
+          dataString = JSON.stringify(data, null, '  ');
+        }
       } catch (e) {}
 
       annotation.message    = message;
