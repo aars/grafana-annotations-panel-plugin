@@ -253,7 +253,6 @@ function (angular, app, _, moment, PanelMeta, config) {
       $scope.$broadcast('render');
     }
 
-
     panelSrv.init($scope);
   });
 });
